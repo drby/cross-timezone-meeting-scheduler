@@ -12,15 +12,16 @@
   },
   "dependencies": {
     "@prisma/client": "^6.0.1",
+    "iron-session": "^8.0.4",
     "next": "14.2.20",
-    "react": "^18",
-    "react-dom": "^18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
     "@types/node": "^20.17.9",
-    "@types/react": "^18",
-    "@types/react-dom": "^18",
+    "@types/react": "^18.3.1",
+    "@types/react-dom": "^18.3.1",
     "eslint": "^8",
     "eslint-config-next": "14.2.20",
     "postcss": "^8",
