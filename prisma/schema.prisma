@@ -19,8 +19,8 @@ model User {
   calendarId        Int?
   events            Event[]   @relation("UserEvents")
   preferredTimeZone String    @default("UTC")
-  dailyStartTime    DateTime  @default("1970-01-01T09:00:00Z")
-  dailyEndTime      DateTime  @default("1970-01-01T17:00:00Z")
+  dailyStartTime    String    @default("09:00")
+  dailyEndTime      String    @default("17:00")
 }
 
 model Calendar {

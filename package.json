@@ -17,18 +17,20 @@
     "next": "14.2.20",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "timezones-list": "^3.0.3"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.17.9",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.1",
+    "autoprefixer": "^10.4.20",
     "eslint": "^8",
     "eslint-config-next": "14.2.20",
-    "postcss": "^8",
+    "postcss": "^8.4.49",
     "prisma": "^6.0.1",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.16",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2"
   }
