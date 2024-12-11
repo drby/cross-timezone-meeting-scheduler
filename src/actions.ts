@@ -11,7 +11,6 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// Authentication
 export const getSession = async () => {
   const session = await getIronSession<SessionData>(cookies(), sessionOptions)
 
