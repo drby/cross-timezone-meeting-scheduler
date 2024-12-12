@@ -1,11 +1,11 @@
 import { FC } from "react";
-
+import CalendarCard from "@/components/Calendar";
 
 
 const CalendarPage: FC = () => {
   return (
-    <div className="login">
-        <h1>doge</h1>
+    <div>
+      <CalendarCard />
     </div>
   )
 }
