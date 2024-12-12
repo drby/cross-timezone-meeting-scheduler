@@ -25,6 +25,9 @@ export const signup = async (prevState: { error: undefined | string }, formData:
 
   const username = formData.get("username") as string;
   const password = formData.get("password") as string;
+  const formPreferredTimeZone = formData.get("preferredTimeZone") as string;
+  const formDailyStartTime = formData.get("dailyStartTime") as string;
+  const formDailyEndTime = formData.get("dailyEndTime") as string;
 
   const existingUser = await prisma.user.findUnique({
     where: { username },
@@ -37,7 +40,23 @@ export const signup = async (prevState: { error: undefined | string }, formData:
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const newUser = await prisma.user.create({
-    data: { username, password: hashedPassword },
+    data: {
+      username: username,
+      password: hashedPassword,
+      preferredTimeZone: formPreferredTimeZone,
+      dailyStartTime: formDailyStartTime,
+      dailyEndTime: formDailyEndTime,
+      isLoggedIn: true,
+    },
+  });
+
+  await prisma.calendar.create({
+    data: {
+      name: `${username}'s Calendar`,
+      owner: {
+        connect: { id: newUser.id },
+      },
+    },
   });
 
   session.userId = newUser.id.toString();
@@ -68,6 +87,11 @@ export const login = async (prevState: { error: undefined | string }, formData: 
     return { error: "Wrong Credentials" };
   }
 
+  await prisma.user.update({
+    where: { id: user.id },
+    data: { isLoggedIn: true },
+  });
+
   session.userId = user.id.toString();
   session.username = formUsername;
   session.isLoggedIn = true;
@@ -78,6 +102,12 @@ export const login = async (prevState: { error: undefined | string }, formData: 
 
 export const logout = async () => {
   const session = await getSession()
+
+  await prisma.user.update({
+    where: { id: Number(session.userId) },
+    data: { isLoggedIn: false },
+  });
+
   session.destroy();
   redirect("/")
 }
