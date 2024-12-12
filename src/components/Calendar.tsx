@@ -7,7 +7,7 @@ import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
-const CalendarCard: FC = () => {
+const Calendar: FC = () => {
 
   const events = [
     {
@@ -33,4 +33,4 @@ const CalendarCard: FC = () => {
   );
 };
 
-export default CalendarCard;
+export default Calendar;

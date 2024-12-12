@@ -1,11 +1,11 @@
 import { FC } from "react";
-import CalendarCard from "@/components/Calendar";
+import Calendar from "@/components/Calendar";
 
 
 const CalendarPage: FC = () => {
   return (
     <div>
-      <CalendarCard />
+      <Calendar />
     </div>
   )
 }
