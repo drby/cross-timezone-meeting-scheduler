@@ -50,6 +50,15 @@ export const signup = async (prevState: { error: undefined | string }, formData:
     },
   });
 
+  await prisma.calendar.create({
+    data: {
+      name: `${username}'s Calendar`,
+      owner: {
+        connect: { id: newUser.id },
+      },
+    },
+  });
+
   session.userId = newUser.id.toString();
   session.username = username;
   session.isLoggedIn = true;
