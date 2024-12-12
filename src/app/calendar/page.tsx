@@ -6,6 +6,7 @@ const CalendarPage: FC = () => {
   return (
     <div>
       <Calendar />
+      doge
     </div>
   )
 }
