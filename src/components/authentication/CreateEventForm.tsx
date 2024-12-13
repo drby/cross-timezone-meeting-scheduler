@@ -12,7 +12,7 @@ const CreateEventForm: FC = () => {
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [users, setUsers] = useState<{ id: number; username: string }[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<{ value: number; label: string }[]>([]);
+  const [selectedUsers, setSelectedUsers] = useState<{ value: number; label: string }[]>([]); // test
 
   const [userId, setUserId] = useState<string | null>(null);
 
