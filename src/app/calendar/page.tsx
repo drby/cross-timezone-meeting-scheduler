@@ -5,10 +5,10 @@ import CreateEventForm from "@/components/authentication/CreateEventForm";
 
 const CalendarPage: FC = () => {
   return (
-    <div>
+    <>
       <Calendar />
       <CreateEventForm />
-    </div>
+    </>
   )
 }
 

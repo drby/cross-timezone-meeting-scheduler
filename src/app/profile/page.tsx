@@ -1,7 +1,6 @@
 import { changeUsername, getSession } from "@/actions"
 import { redirect } from "next/navigation"
 
-
 const Page = async () => {
   const session = await getSession()
 

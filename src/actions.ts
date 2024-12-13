@@ -97,7 +97,7 @@ export const login = async (prevState: { error: undefined | string }, formData: 
   session.isLoggedIn = true;
 
   await session.save();
-  redirect("/");
+  return { userId: user.id.toString() };
 };
 
 export const logout = async () => {
@@ -187,4 +187,14 @@ export const createEvent = async (prevState: { error: undefined | string }, form
   });
 
   return newEvent;
+};
+
+export const fetchUsers = async () => {
+  const users = await prisma.user.findMany({
+    select: {
+      id: true,
+      username: true,
+    },
+  });
+  return users;
 };
