@@ -2,7 +2,6 @@
 
 import { FC, FormEvent, useState, useEffect } from "react";
 import { useFormState } from "react-dom";
-
 import { getSession, createEvent, fetchUsers } from "@/actions";
 import Select from 'react-select';
 
@@ -12,8 +11,7 @@ const CreateEventForm: FC = () => {
 
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [users, setUsers] = useState<{ id: number; username: string }[]>([]);
-  const [selectedUsers, setSelectedUsers] = useState<{ value: number; label: string }[]>([]); // test
-
+  const [selectedUsers, setSelectedUsers] = useState<{ value: number; label: string }[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -40,6 +38,9 @@ const CreateEventForm: FC = () => {
 
     const formData = new FormData(e.target as HTMLFormElement);
     const userIds = selectedUsers.map(user => user.value);
+    if (userId) {
+      userIds.push(Number(userId)); // Ensure the creator's ID is included
+    }
     formData.set('userIds', userIds.join(','));
 
     try {
@@ -51,16 +52,15 @@ const CreateEventForm: FC = () => {
   };
 
   const userOptions = users
-  .filter(user => user.id.toString() !== userId)
-  .map(user => ({
-    value: user.id,
-    label: user.username,
-  }));
+    .filter(user => user.id.toString() !== userId) // Exclude the logged-in user
+    .map(user => ({
+      value: user.id,
+      label: user.username,
+    }));
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6 p-4 max-w-md mx-auto bg-white shadow-md rounded">
       <h2 className="text-2xl font-bold mb-4">Create Event</h2>
-
       <label htmlFor="title" className="block text-sm font-medium text-gray-700">Event Title</label>
       <input
         required
