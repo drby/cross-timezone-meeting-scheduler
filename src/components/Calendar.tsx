@@ -8,12 +8,18 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 
 const Calendar: FC = () => {
-
   const events = [
     {
       title: "Test Event",
-      start: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), // Tomorrow
-      end: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), // Tomorrow
+      start: "2024-12-19T00:18:46.000Z",
+      end: "2024-12-20T00:18:46.000Z",
+      timezone: "America/New_York"
+    },
+    {
+      title: "doge Event",
+      start: "2024-12-26T00:18:46.000Z",
+      end: "2024-12-29T00:18:46.000Z",
+      timezone: "America/New_York"
     },
   ];
 
@@ -26,8 +32,17 @@ const Calendar: FC = () => {
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        events={events}
+        events={events?.map(event => ({
+          ...event,
+          start: event.start,
+          end: event.end,
+          display: 'block',
+          extendedProps: {
+            timezone: event.timezone,
+          },
+        }))}
         eventClick={handleEventClick}
+        timeZone="America/New_York" // dynamic
       />
     </div>
   );

@@ -35,7 +35,8 @@ model Event {
   id          Int        @id @default(autoincrement())
   title       String
   description String?
-  date        DateTime   @default(now())
+  start       DateTime   @default(now())
+  end         DateTime
   users       User[]     @relation("UserEvents")
   calendars   Calendar[] @relation("CalendarEvents")
 }
