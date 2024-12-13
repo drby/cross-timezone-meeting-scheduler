@@ -12,10 +12,9 @@ const Calendar: FC = () => {
   const events = [
     {
       title: "Test Event",
-      start: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), // Tomorrow
-      end: new Date(new Date().setDate(new Date().getDate() + 1)).toISOString(), // Tomorrow
-    },
-  ];
+      start: "2024-12-19T00:18:46.000Z",
+      end: "2024-12-20T00:18:46.000Z",
+  }];
 
   const handleEventClick = (clickInfo: { event: { title: string } }) => {
     alert(`Event: ${clickInfo.event.title}`);

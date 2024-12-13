@@ -130,3 +130,61 @@ export const changeUsername = async (formData: FormData) => {
   await session.save();
   revalidatePath("/profile");
 };
+
+export const createEvent = async (prevState: { error: undefined | string }, formData: FormData) => {
+  const session = await getIronSession<SessionData>(cookies(), sessionOptions);
+
+  const title = formData.get('title') as string;
+  const description = formData.get('description') as string;
+  const start = new Date(formData.get('start') as string);
+  const end = formData.get('end') ? new Date(formData.get('end') as string) : new Date(start.getTime() + 60 * 60 * 1000);
+  const userIds = (formData.get('userIds') as string).split(',').map(Number);
+  const creatorId = Number(session.userId);
+
+  if (!userIds.includes(creatorId)) {
+    userIds.push(creatorId);
+  }
+
+  const users = await prisma.user.findMany({
+    where: {
+      id: {
+        in: userIds,
+      },
+    },
+  });
+
+  if (users.length !== userIds.length) {
+    throw new Error('One or more user IDs do not exist');
+  }
+
+  const calendars = await prisma.calendar.findMany({
+    where: {
+      ownerId: {
+        in: userIds,
+      },
+    },
+  });
+
+  const calendarIds = calendars.map((calendar) => calendar.id);
+
+  if (calendarIds.length !== userIds.length) {
+    throw new Error('One or more calendar IDs do not exist');
+  }
+
+  const newEvent = await prisma.event.create({
+    data: {
+      title,
+      description,
+      start,
+      end,
+      users: {
+        connect: userIds.map((id) => ({ id })),
+      },
+      calendars: {
+        connect: calendarIds.map((id) => ({ id })),
+      },
+    },
+  });
+
+  return newEvent;
+};
