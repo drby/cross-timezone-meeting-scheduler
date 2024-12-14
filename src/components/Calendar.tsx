@@ -1,9 +1,8 @@
-"use client"
+"use client";
 
 import { FC, useEffect, useState } from "react";
-
-import FullCalendar from '@fullcalendar/react'
-import dayGridPlugin from '@fullcalendar/daygrid'
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import { fetchUserCalendar, getSession } from "@/actions";
@@ -15,9 +14,21 @@ interface CalendarEvent {
   timezone?: string;
 }
 
-const Calendar: FC = () => {
+interface User {
+  id: number;
+  username: string;
+  dailyStartTime: string;
+  dailyEndTime: string;
+}
+
+interface CalendarProps {
+  selectedUsers: User[];
+}
+
+const Calendar: FC<CalendarProps> = ({ selectedUsers }) => {
   const [events, setEvents] = useState<CalendarEvent[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [userTimeZone, setUserTimeZone] = useState<string | null>(null);
 
   useEffect(() => {
     const loadSession = async () => {
@@ -31,18 +42,16 @@ const Calendar: FC = () => {
 
   useEffect(() => {
     const loadCalendar = async () => {
-      const session = await getSession();
-      if (session.isLoggedIn) {
-        if (userId) {
-          const calendar = await fetchUserCalendar(userId);
-          if (calendar && calendar.events) {
-            const userEvents = calendar.events.map(event => ({
-              title: event.title,
-              start: event.start.toISOString(),
-              end: event.end.toISOString(),
-            }));
-            setEvents(userEvents);
-          }
+      if (userId) {
+        const { calendar, preferredTimeZone } = await fetchUserCalendar(userId);
+        if (calendar && calendar.events) {
+          const userEvents = calendar.events.map(event => ({
+            title: event.title,
+            start: event.start.toISOString(),
+            end: event.end.toISOString(),
+          }));
+          setEvents(userEvents);
+          setUserTimeZone(preferredTimeZone);
         }
       }
     };
@@ -53,24 +62,39 @@ const Calendar: FC = () => {
     alert(`Event: ${clickInfo.event.title}`);
   };
 
-  console.log(events);
+  const backgroundEvents = selectedUsers.flatMap(user => {
+    const startTime = new Date();
+    const [startHour, startMinute] = user.dailyStartTime.split(':').map(Number);
+    startTime.setHours(startHour, startMinute, 0, 0);
+
+    const endTime = new Date();
+    const [endHour, endMinute] = user.dailyEndTime.split(':').map(Number);
+    endTime.setHours(endHour, endMinute, 0, 0);
+
+    return {
+      title: `${user.username}'s Availability`,
+      start: startTime.toISOString(),
+      end: endTime.toISOString(),
+      display: 'background',
+      backgroundColor: '#d1e7dd',
+      borderColor: '#d1e7dd',
+    };
+  });
 
   return (
     <div className="calendar-container mx-auto p-4 max-w-4xl">
       <FullCalendar
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="dayGridMonth"
-        events={events?.map(event => ({
-          ...event,
-          start: event.start,
-          end: event.end,
-          display: 'block',
-          extendedProps: {
-            timezone: event.timezone,
-          },
-        }))}
+        events={[...events, ...backgroundEvents]}
         eventClick={handleEventClick}
-        timeZone="America/New_York" // dynamic
+        timeZone={userTimeZone ?? undefined}
+        titleFormat={{ timeZoneName: 'short' }}
+        headerToolbar={{
+          left: 'prev,next today',
+          center: 'title',
+          right: 'dayGridMonth,timeGridWeek,timeGridDay'
+        }}
       />
     </div>
   );
