@@ -22,9 +22,13 @@ const CalendarPage: FC = () => {
   return (
     <>
       <Calendar selectedUsers={selectedUsers} />
-      <div className="flex justify-between max-w-4xl mx-auto p-4">
-        <CreateEventForm />
-        <UserAvailabilityCard onUserSelectionChange={handleUserSelectionChange} />
+      <div className="flex justify-between max-w-4xl mx-auto p-4 space-x-4">
+        <div className="w-1/2">
+          <CreateEventForm />
+        </div>
+        <div className="w-1/2">
+          <UserAvailabilityCard onUserSelectionChange={handleUserSelectionChange} />
+        </div>
       </div>
     </>
   )
