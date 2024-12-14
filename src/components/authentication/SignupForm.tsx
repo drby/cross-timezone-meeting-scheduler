@@ -6,8 +6,12 @@ import { signup } from "@/actions";
 import timezones from "timezones-list";
 
 const SignupForm: FC = () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [state, formAction] = useFormState<any, FormData>(signup, undefined);
+  interface SignupFormState {
+    error: string | undefined;
+  }
+
+  const initialState: SignupFormState = { error: undefined };
+  const [state, formAction] = useFormState<SignupFormState, FormData>(signup, initialState);
 
   return (
     <form action={formAction} className="space-y-6 p-4 max-w-md mx-auto bg-white shadow-md rounded">

@@ -3,12 +3,6 @@ import { FC } from "react";
 import SignupForm from "@/components/authentication/SignupForm"
 
 
-const SignupPage: FC = () => {
-  return (
-    <div className="login">
-        <SignupForm />
-    </div>
-  )
-}
+const SignupPage: FC = () => <SignupForm />
 
 export default SignupPage

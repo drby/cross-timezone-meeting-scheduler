@@ -42,7 +42,7 @@ const UserAvailabilityCard: FC<UserAvailabilityCardProps> = ({ onUserSelectionCh
       <h2 className="text-2xl font-bold mb-4">User Availability</h2>
       <ul>
         {users.map((user) => (
-          <li key={user.id} className="mb-2">
+          <div key={user.id} className="mb-2">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -57,7 +57,7 @@ const UserAvailabilityCard: FC<UserAvailabilityCardProps> = ({ onUserSelectionCh
                 Available from {user.dailyStartTime} to {user.dailyEndTime}
               </div>
             )}
-          </li>
+          </div>
         ))}
       </ul>
     </div>

@@ -1,24 +1,15 @@
-import { changeUsername, getSession } from "@/actions"
 import { redirect } from "next/navigation"
+import { getSession } from "@/actions";
+import ProfileContent from "@/components/ProfileContent";
 
 const Page = async () => {
-  const session = await getSession()
+  const session = await getSession();
 
   if (!session.isLoggedIn) {
-    redirect("/")
+    redirect("/");
   }
 
-  return (
-    <div className="profile">
-      <h1>Profile page</h1>
-      <p>Welcome, <b>{session.username}</b></p>
-      <h4>Change user name</h4>
-      <form action={changeUsername}>
-        <input type="text" name="username" required placeholder={session.username} />
-        <button>Update</button>
-      </form>
-    </div>
-  )
-}
+  return <ProfileContent session={{ ...session, username: session.username || "" }} />;
+};
 
-export default Page
+export default Page;
