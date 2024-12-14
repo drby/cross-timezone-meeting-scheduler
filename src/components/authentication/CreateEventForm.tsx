@@ -39,7 +39,7 @@ const CreateEventForm: FC = () => {
     const formData = new FormData(e.target as HTMLFormElement);
     const userIds = selectedUsers.map(user => user.value);
     if (userId) {
-      userIds.push(Number(userId)); // Ensure the creator's ID is included
+      userIds.push(Number(userId));
     }
     formData.set('userIds', userIds.join(','));
 
@@ -52,14 +52,14 @@ const CreateEventForm: FC = () => {
   };
 
   const userOptions = users
-    .filter(user => user.id.toString() !== userId) // Exclude the logged-in user
+    .filter(user => user.id.toString() !== userId)
     .map(user => ({
       value: user.id,
       label: user.username,
     }));
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 p-4 max-w-md mx-auto bg-white shadow-md rounded">
+    <form onSubmit={handleSubmit} className="space-y-6 p-4 max-w-md bg-white shadow-md rounded">
       <h2 className="text-2xl font-bold mb-4">Create Event</h2>
       <label htmlFor="title" className="block text-sm font-medium text-gray-700">Event Title</label>
       <input

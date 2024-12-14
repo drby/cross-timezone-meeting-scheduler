@@ -201,18 +201,31 @@ export const fetchUsers = async () => {
     select: {
       id: true,
       username: true,
+      dailyEndTime: true,
+      dailyStartTime: true,
     },
   });
   return users;
 };
 
 export const fetchUserCalendar = async (userId: string) => {
-  const calendar = await prisma.calendar.findUnique({
-    where: { ownerId: Number(userId) },
+  const user = await prisma.user.findUnique({
+    where: { id: Number(userId) },
     include: {
-      events: true,
+      calendar: {
+        include: {
+          events: true,
+        },
+      },
     },
   });
 
-  return calendar;
+  if (!user) {
+    throw new Error('User not found');
+  }
+
+  return {
+    calendar: user.calendar,
+    preferredTimeZone: user.preferredTimeZone,
+  };
 };
