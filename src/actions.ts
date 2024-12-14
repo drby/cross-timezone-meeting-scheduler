@@ -97,7 +97,7 @@ export const login = async (prevState: { error: undefined | string }, formData: 
   session.isLoggedIn = true;
 
   await session.save();
-  return { userId: user.id.toString() };
+  redirect("/");
 };
 
 export const logout = async () => {
@@ -124,6 +124,11 @@ export const changeUsername = async (formData: FormData) => {
   await prisma.user.update({
     where: { id: Number(session.userId) },
     data: { username: newUsername },
+  });
+
+  await prisma.calendar.update({
+    where: { ownerId: Number(session.userId) },
+    data: { name: `${newUsername}'s Calendar` },
   });
 
   session.username = newUsername;
@@ -154,6 +159,8 @@ export const createEvent = async (prevState: { error: undefined | string }, form
   });
 
   if (users.length !== userIds.length) {
+      console.error('User IDs provided:', userIds);
+  console.error('Users found:', users);
     throw new Error('One or more user IDs do not exist');
   }
 
@@ -197,4 +204,15 @@ export const fetchUsers = async () => {
     },
   });
   return users;
+};
+
+export const fetchUserCalendar = async (userId: string) => {
+  const calendar = await prisma.calendar.findUnique({
+    where: { ownerId: Number(userId) },
+    include: {
+      events: true,
+    },
+  });
+
+  return calendar;
 };
